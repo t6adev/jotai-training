@@ -6,5 +6,5 @@ Just try to implement [this sample](https://blog.cybozu.io/entry/2023/04/20/1900
 [x] Adding lines and items
 [x] Delete lines and items
 [] Move lines and items
-[] Edit items
+[x] Edit items
 [] Fetch and update data

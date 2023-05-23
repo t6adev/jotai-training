@@ -1,11 +1,12 @@
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtomValue, useSetAtom, useAtom } from 'jotai';
 import { nanoid } from 'nanoid';
 
 type Item = {
   id: string;
   index: number;
+  text: string;
 };
-const createItemAtom = (index: number) => atom<Item>({ id: nanoid(), index });
+const createItemAtom = (index: number) => atom<Item>({ id: nanoid(), index, text: '' });
 
 type ItemAtom = ReturnType<typeof createItemAtom>;
 
@@ -43,12 +44,17 @@ const removeItemAtom = atom(
 );
 
 const Item = ({ itemAtom, lineAtom }: { itemAtom: ItemAtom; lineAtom: LineAtom }) => {
-  const item = useAtomValue(itemAtom);
+  const [item, setItem] = useAtom(itemAtom);
   const removeItem = useSetAtom(removeItemAtom);
   return (
     <div style={{ padding: '4px', border: 'solid 1px white' }}>
       <div>Item : {item.id}</div>
       <div>{item.index}</div>
+      <input
+        type="text"
+        value={item.text}
+        onChange={(e) => setItem({ ...item, text: e.target.value })}
+      />
       <button onClick={() => removeItem(lineAtom, itemAtom)}>Delete</button>
     </div>
   );
