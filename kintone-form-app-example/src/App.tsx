@@ -28,18 +28,13 @@ const addLineAtom = atom(null, (get, set) => {
 const removeItemAtom = atom(
   null,
   (get, set, targetLineAtom: LineAtom, targetItemAtom: ItemAtom) => {
-    set(
-      linesAtom,
-      get(linesAtom).map((lineAtom) => {
-        if (lineAtom !== targetLineAtom) return lineAtom;
-        const { itemAtoms, ...other } = get(lineAtom);
-        const newItemAtoms = itemAtoms.filter((itemAtom) => itemAtom !== targetItemAtom);
-        return atom({
-          ...other,
-          itemAtoms: newItemAtoms,
-        });
-      })
-    );
+    const { itemAtoms, ...other } = get(targetLineAtom);
+    const newItemAtoms = itemAtoms.filter((itemAtom) => itemAtom !== targetItemAtom);
+    newItemAtoms.forEach((itemAtom, index) => set(itemAtom, { ...get(itemAtom), index }));
+    set(targetLineAtom, {
+      ...other,
+      itemAtoms: newItemAtoms,
+    });
   }
 );
 
